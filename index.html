@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Расчет</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Подключаем CSS -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Расчет</h1>
+        <form id="calculationForm">
+            <!-- Населенный пункт -->
+            <div class="form-group">
+                <label for="location">Населенный пункт:</label>
+                <select id="location" required>
+                    <option value="Алдан">Алданский район</option>
+                    <!-- <option value="Ленинский">Ленинский</option> -->
+                </select>
+            </div>
+
+            <!-- Год постройки -->
+            <div class="form-group">
+                <label for="year">Выберите год постройки:</label>
+                <select id="year" required>
+                    <option value=""></option>
+                    <option value="до 1999">до 1999</option>
+                    <option value="после 1999">после 1999</option>
+                </select>
+            </div>
+
+            <!-- Этажность -->
+            <div class="form-group">
+                <label for="floors">Выберите этажность:</label>
+                <select id="floors" required>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+
+            <!-- Коэффициент перевода -->
+            <div class="form-group">
+                <label for="coefficient">Коэффициент перевода:</label>
+                <input type="text" id="coefficient" readonly>
+            </div>
+
+            <!-- Тариф отопления -->
+            <div class="form-group">
+                <label for="heatingTariff">Тариф отопления:</label>
+                <input type="text" id="heatingTariff" readonly>
+            </div>
+
+            <!-- Площадь здания -->
+            <div class="form-group">
+                <label for="area">Введите площадь здания:</label>
+                <input type="number" step="any" id="area" required placeholder="Только цифры">
+            </div>
+
+            <!-- Горячее водоснабжение, расход и тариф в одну строку -->
+            <div class="form-group-row">
+                <div class="form-group">
+                    <label for="consumptionType">Выберите горячее водоснабжение:</label>
+                    <select id="consumptionType" required>
+                        <option value="ЦГВС">ЦГВС(5 труб)</option>
+                        <option value="ГВС">ГВС(3 трубы)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="consumptionValue">Расход:</label>
+                    <input type="number" step="any" id="consumptionValue" required placeholder="Только цифры">
+                </div>
+                <div class="form-group">
+                    <label for="consumptionTariff">Тариф:</label>
+                    <input type="text" id="consumptionTariff" readonly>
+                </div>
+            </div>
+
+            <!-- Расход ХВС и тариф ХВС в одну строку -->
+            <div class="form-group-row">
+                <div class="form-group">
+                    <label for="coldWater">Расход ХВС:</label>
+                    <input type="number" step="any" id="coldWater" required placeholder="Только цифры">
+                </div>
+                <div class="form-group">
+                    <label for="coldWaterTariff">Тариф:</label>
+                    <input type="text" id="coldWaterTariff" value="68.26" readonly>
+                </div>
+            </div>
+
+            <!-- Кнопка "Рассчитать" -->
+            <button type="submit">Рассчитать</button>
+        </form>
+
+        <!-- Блок для отображения результатов -->
+        <div class="results" id="results" style="display: none;">
+            <h2>Результаты расчета</h2>
+            <p>
+                <strong>Отопление:</strong><br>
+                <span id="areaValue"></span> × <span id="coefficientValue"></span> × <span id="heatingTariffValue"></span> = <span id="heatingResult"></span> руб.
+            </p>
+            <p>
+                <strong>Горячее водоснабжение:</strong><br>
+                <span id="consumptionValueResult"></span> × <span id="consumptionTariffValue"></span> = <span id="hotWaterResult"></span> руб.
+            </p>
+            <p>
+                <strong>Холодное водоснабжение:</strong><br>
+                <span id="coldWaterValue"></span> × <span id="coldWaterTariffValue"></span> = <span id="coldWaterResult"></span> руб.
+            </p>
+            <p>
+                <strong>Итого:</strong> <span id="totalResult"></span> руб.
+            </p>
+        </div>
+    </div>
+
+    <script src="app.js"></script> <!-- Подключаем JavaScript -->
+</body>
+</html>
