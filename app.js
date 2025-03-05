@@ -11,9 +11,9 @@ const coefficients = {
 
 const heatingTariffs = { 1: 1194.04, 2: 1470.59, 3: 1619.76, 4: 1808.48, 5: 1974.62 };
 
-const consumptionTariffs = { "ЦГВС": 148.88, "ГВС": 50.97 };
+const consumptionTariffs = { "ЦГВС": 148.88, "ГВС": 50.97, "Нет": "-" }; // Добавлено значение "Нет"
 
-const wastewaterTariffs = { "Септик": 0, "Коллектор": 55 };
+const wastewaterTariffs = { "Септик": "-", "Коллектор": 38.14 };
 
 // Функция для замены запятой на точку
 function parseNumber(input) {
@@ -35,7 +35,7 @@ function updateCalculations() {
     const heatingTariff = heatingTariffs[floors];
     document.getElementById('heatingTariff').value = heatingTariff;
 
-    // Тариф расхода (ЦГВС/ГВС)
+    // Тариф расхода (ЦГВС/ГВС/Нет)
     const consumptionTariff = consumptionTariffs[consumptionType];
     document.getElementById('consumptionTariff').value = consumptionTariff;
 
@@ -58,6 +58,7 @@ document.getElementById('calculationForm').addEventListener('submit', (event) =>
     const area = parseNumber(document.getElementById('area').value);
     const coefficient = parseFloat(document.getElementById('coefficient').value);
     const heatingTariff = parseFloat(document.getElementById('heatingTariff').value);
+    const consumptionType = document.getElementById('consumptionType').value;
     const consumptionValue = parseNumber(document.getElementById('consumptionValue').value);
     const consumptionTariff = parseFloat(document.getElementById('consumptionTariff').value);
     const coldWater = parseNumber(document.getElementById('coldWater').value);
@@ -67,13 +68,27 @@ document.getElementById('calculationForm').addEventListener('submit', (event) =>
 
     // Выполнение расчетов
     const heatingResult = (area * coefficient * heatingTariff).toFixed(2);
-    const hotWaterResult = (consumptionValue * consumptionTariff).toFixed(2);
-    const coldWaterResult = (coldWater * coldWaterTariff).toFixed(2);
 
-    // Расчет сточных вод
+    // Расчет горячего водоснабжения (если не выбрано "Нет" и расход не равен 0)
+    let hotWaterResult = 0;
+    let hotWaterText = ''; // Текст для отображения в результатах
+    if (consumptionType !== "Нет" && consumptionValue !== 0) {
+        hotWaterResult = (consumptionValue * consumptionTariff).toFixed(2);
+        hotWaterText = `${consumptionValue} × ${consumptionTariff} = ${hotWaterResult} руб.`;
+    }
+
+    // Расчет холодного водоснабжения (если расход не равен 0)
+    let coldWaterResult = 0;
+    let coldWaterText = ''; // Текст для отображения в результатах
+    if (coldWater !== 0) {
+        coldWaterResult = (coldWater * coldWaterTariff).toFixed(2);
+        coldWaterText = `${coldWater} × ${coldWaterTariff} = ${coldWaterResult} руб.`;
+    }
+
+    // Расчет сточных вод (если выбран Коллектор и сумма расходов не равна 0)
     let wastewaterResult = 0;
     let wastewaterText = ''; // Текст для отображения в результатах
-    if (wastewaterType === "Коллектор") {
+    if (wastewaterType === "Коллектор" && (consumptionValue !== 0 || coldWater !== 0)) {
         const totalConsumption = parseFloat(consumptionValue) + parseFloat(coldWater);
         wastewaterResult = (totalConsumption * wastewaterTariff).toFixed(2);
         wastewaterText = `(${consumptionValue} + ${coldWater}) × ${wastewaterTariff} = ${wastewaterResult} руб.`;
@@ -93,17 +108,27 @@ document.getElementById('calculationForm').addEventListener('submit', (event) =>
     document.getElementById('heatingTariffValue').textContent = heatingTariff;
     document.getElementById('heatingResult').textContent = heatingResult;
 
-    document.getElementById('consumptionValueResult').textContent = consumptionValue;
-    document.getElementById('consumptionTariffValue').textContent = consumptionTariff;
-    document.getElementById('hotWaterResult').textContent = hotWaterResult;
+    // Отображение горячего водоснабжения (если не выбрано "Нет" и расход не равен 0)
+    const hotWaterResultElement = document.getElementById('hotWaterResult');
+    if (consumptionType !== "Нет" && consumptionValue !== 0) {
+        hotWaterResultElement.textContent = hotWaterText;
+        hotWaterResultElement.parentElement.style.display = 'block'; // Показываем блок
+    } else {
+        hotWaterResultElement.parentElement.style.display = 'none'; // Скрываем блок
+    }
 
-    document.getElementById('coldWaterValue').textContent = coldWater;
-    document.getElementById('coldWaterTariffValue').textContent = coldWaterTariff;
-    document.getElementById('coldWaterResult').textContent = coldWaterResult;
+    // Отображение холодного водоснабжения (если расход не равен 0)
+    const coldWaterResultElement = document.getElementById('coldWaterResult');
+    if (coldWater !== 0) {
+        coldWaterResultElement.textContent = coldWaterText;
+        coldWaterResultElement.parentElement.style.display = 'block'; // Показываем блок
+    } else {
+        coldWaterResultElement.parentElement.style.display = 'none'; // Скрываем блок
+    }
 
-    // Отображение сточных вод (только если выбран Коллектор)
+    // Отображение сточных вод (если выбран Коллектор и сумма расходов не равна 0)
     const wastewaterResultElement = document.getElementById('wastewaterResult');
-    if (wastewaterType === "Коллектор") {
+    if (wastewaterType === "Коллектор" && (consumptionValue !== 0 || coldWater !== 0)) {
         wastewaterResultElement.textContent = wastewaterText;
         wastewaterResultElement.parentElement.style.display = 'block'; // Показываем блок
     } else {
@@ -125,7 +150,7 @@ document.getElementById('calculationForm').addEventListener('submit', (event) =>
         heatingTariff: heatingTariff,
         area: area,
         heatingResult: heatingResult,
-        consumptionType: document.getElementById('consumptionType').value,
+        consumptionType: consumptionType,
         consumptionValue: consumptionValue,
         consumptionTariff: consumptionTariff,
         hotWaterResult: hotWaterResult,
