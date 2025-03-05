@@ -44,6 +44,12 @@
                 </select>
             </div>
 
+            <!-- Площадь здания -->
+            <div class="form-group">
+                <label for="area">Введите площадь здания:</label>
+                <input type="number" step="any" id="area" required placeholder="Только цифры">
+            </div>
+
             <!-- Коэффициент перевода -->
             <div class="form-group">
                 <label for="coefficient">Коэффициент перевода:</label>
@@ -56,24 +62,19 @@
                 <input type="text" id="heatingTariff" readonly>
             </div>
 
-            <!-- Площадь здания -->
-            <div class="form-group">
-                <label for="area">Введите площадь здания:</label>
-                <input type="number" step="any" id="area" required placeholder="Только цифры">
-            </div>
-
             <!-- Горячее водоснабжение, расход и тариф в одну строку -->
             <div class="form-group-row">
                 <div class="form-group">
                     <label for="consumptionType">Выберите горячее водоснабжение:</label>
                     <select id="consumptionType" required>
+                        <option value="Нет">Нет</option>
                         <option value="ЦГВС">ЦГВС(5 труб)</option>
                         <option value="ГВС">ГВС(3 трубы)</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="consumptionValue">Расход:</label>
-                    <input type="number" step="any" id="consumptionValue" required placeholder="Только цифры">
+                    <input type="number" value="0" step="any" id="consumptionValue" required placeholder="Только цифры">
                 </div>
                 <div class="form-group">
                     <label for="consumptionTariff">Тариф:</label>
@@ -85,7 +86,7 @@
             <div class="form-group-row">
                 <div class="form-group">
                     <label for="coldWater">Расход ХВС:</label>
-                    <input type="number" step="any" id="coldWater" required placeholder="Только цифры">
+                    <input type="number" value="0" step="any" id="coldWater" required placeholder="Только цифры">
                 </div>
                 <div class="form-group">
                     <label for="coldWaterTariff">Тариф:</label>
@@ -119,13 +120,13 @@
                 <strong>Отопление:</strong><br>
                 <span id="areaValue"></span> × <span id="coefficientValue"></span> × <span id="heatingTariffValue"></span> = <span id="heatingResult"></span> руб.
             </p>
-            <p>
+            <p id="hotWaterBlock" style="display: none;">
                 <strong>Горячее водоснабжение:</strong><br>
-                <span id="consumptionValueResult"></span> × <span id="consumptionTariffValue"></span> = <span id="hotWaterResult"></span> руб.
+                <span id="hotWaterResult"></span>
             </p>
             <p>
                 <strong>Холодное водоснабжение:</strong><br>
-                <span id="coldWaterValue"></span> × <span id="coldWaterTariffValue"></span> = <span id="coldWaterResult"></span> руб.
+                <span id="coldWaterResult"></span> руб.
             </p>
             <p id="wastewaterBlock" style="display: none;">
                 <strong>Сточные воды:</strong><br>
