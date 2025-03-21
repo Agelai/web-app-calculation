@@ -6,7 +6,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     overflow-y: auto; /* Общий скролл для страницы */
 }
 
@@ -17,6 +17,7 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 100%;
     max-width: 400px;
+    margin: 20px;
 }
 
 h1 {
@@ -127,4 +128,37 @@ button:hover {
     font-size: 18px;
     font-weight: bold;
     color: #333;
+}
+
+/* Медиа-запросы для мобильных устройств */
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+        margin: 10px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    .form-group-row {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .form-group-row .form-group {
+        width: 100%;
+    }
+
+    .results h2 {
+        font-size: 18px;
+    }
+
+    .results p {
+        font-size: 14px;
+    }
+
+    .results #totalResult {
+        font-size: 16px;
+    }
 }
