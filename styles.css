@@ -5,7 +5,7 @@ body {
     padding: 0;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start; /* Изменено на flex-start, чтобы форма не центрировалась по вертикали */
     min-height: 100vh;
     overflow-y: auto; /* Общий скролл для страницы */
 }
@@ -73,6 +73,8 @@ button:hover {
     background-color: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 4px;
+    max-height: 300px; /* Ограничиваем высоту блока результатов */
+    overflow-y: auto; /* Добавляем прокрутку, если содержимое слишком большое */
 }
 
 .results h2 {
